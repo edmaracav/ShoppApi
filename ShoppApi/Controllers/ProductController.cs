@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ShoppApi.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,25 +20,25 @@ namespace ShoppApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<Product> Get()
         {
             return null;
         }
 
         [HttpPost]
-        public IEnumerable<WeatherForecast> Post()
+        public IEnumerable<Product> Post()
         {
             return null;
         }
 
         [HttpPut]
-        public IEnumerable<WeatherForecast> Put()
+        public IEnumerable<Product> Put()
         {
             return null;
         }
 
         [HttpDelete]
-        public IEnumerable<WeatherForecast> Delete()
+        public IEnumerable<Product> Delete()
         {
             return null;
         }
