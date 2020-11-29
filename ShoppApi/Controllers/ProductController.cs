@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ShoppApi.Controllers
 {
     [ApiController]
-    [Route("[product]")]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         private readonly ILogger<ProductController> _logger;

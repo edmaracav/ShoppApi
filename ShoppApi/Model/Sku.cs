@@ -9,8 +9,8 @@ namespace ShoppApi.Model
     {
         [Key]
         public Guid Oid { get; set; }
-        public string Inventory { get; set; }
-        public  double  Price { get; set; }
+        public int Inventory { get; set; }
+        public  Double  Price { get; set; }
         public Product Product { get; set; }
     }
 }
