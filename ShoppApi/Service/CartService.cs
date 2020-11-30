@@ -19,33 +19,38 @@ namespace ShoppApi.Service
 
         internal GetCartResponse GetCart(String id)
         {
-            GetCartResponse cart = null;
+            Cart cart = null;
+            GetCartResponse response = new GetCartResponse();
 
             logger.LogInformation("CartService.GetCart - Start.");
 
             if (id.Equals(String.Empty))
             {
                 logger.LogInformation("CartService.GetCart - ID is empty, create new cart.");
-                cart = this.AddNewCart();
-            } else
+                cart = this.CreateCart();
+            }
+            else
             {
-                cart = this.CheckCart<GetCartResponse>(id);
+                cart = this.GetCartFromRepository(id);
 
                 if (cart == null)
                 {
                     logger.LogInformation("CartService.GetCart - Not found cart, create new cart.");
-                    cart = this.AddNewCart();
+                    cart = this.CreateCart();
                 }
+
+                response.Cart = cart;
             }
 
             logger.LogInformation("CartService.GetCart - End.");
 
-            return cart;
+            return response;
         }
 
-        internal PostAddCartResponse AddNewProduct(Sku sku, int count)
+        internal PostAddCartResponse AddNewProduct(String id, Sku sku, int count)
         {
-            PostAddCartResponse cart = null;
+            Cart cart = null;
+            PostAddCartResponse response = new PostAddCartResponse();
 
             logger.LogInformation("CartService.AddNewProduct - Start.");
 
@@ -53,32 +58,128 @@ namespace ShoppApi.Service
             {
                 logger.LogInformation("CartService.AddNewProduct - Products count is 0 or less.");
 
-                cart = new PostAddCartResponse("Adding items with zeroed quantity is not allowed");
+                response.ErrorMessage = "Adding items with zeroed quantity is not allowed";
+
+                return response;
             }
 
             Sku foundSku = this.GetSku(sku.Oid);
 
-            if (count > foundSku.Inventory)
+            if (foundSku != null)
             {
-                logger.LogInformation("CartService.AddNewProduct - Count is more then inventory.");
 
-                cart = new PostAddCartResponse("adding more products than is in stock is not allowed");
+                if (count > foundSku.Inventory)
+                {
+                    logger.LogInformation("CartService.AddNewProduct - Count is more then inventory.");
+
+                    response.ErrorMessage = "adding more products than is in stock is not allowed";
+                }
+
+                cart = this.GetCartFromRepository(id);
+
+                if (cart == null)
+                {
+                    logger.LogInformation("CartService.AddNewProduct - Not found cart.");
+
+                    return response;
+                }
+
+                cart.AddSkuToCart(foundSku, count, false);
+
+                this.SaveCart(cart);
+
             }
-
-            cart = this.CheckCart<PostAddCartResponse>(sku.Oid.ToString());
-
-            if (cart == null)
+            else
             {
-                logger.LogInformation("CartService.AddNewProduct - Not found cart.");
+                response.ErrorMessage = "sku not found";
             }
-
-            cart.AddSkuCount(sku, count);
-
-            this.SaveCart(cart);
 
             logger.LogInformation("CartService.AddNewProduct - End.");
 
-            return cart;
+            return response;
+        }
+
+        internal PutAddCartResponse UpdateProduct(String id, Sku sku, int count)
+        {
+
+            Cart cart = null;
+            PutAddCartResponse response = new PutAddCartResponse();
+
+            logger.LogInformation("CartService.UpdateProduct - Start.");
+
+            Sku foundSku = this.GetSku(sku.Oid);
+
+            if (foundSku != null)
+            {
+
+                if (count > foundSku.Inventory)
+                {
+                    logger.LogInformation("CartService.UpdateProduct - Count is more then inventory.");
+                    response.ErrorMessage = "adding more products than is in stock is not allowed";
+                }
+
+                cart = this.GetCartFromRepository(id);
+
+                if (cart == null)
+                {
+                    logger.LogInformation("CartService.UpdateProduct - Not found cart.");
+                    return response;
+                }
+
+                cart.AddSkuToCart(foundSku, count, true);
+
+                this.SaveCart(cart);
+
+            }
+            else
+            {
+                response.ErrorMessage = "sku not found";
+            }
+
+            logger.LogInformation("CartService.UpdateProduct - End.");
+
+            return response;
+
+        }
+
+        internal DeleteCartResponse DeleteProduct(String id, Sku sku)
+        {
+            Cart cart = null;
+            DeleteCartResponse response = new DeleteCartResponse();
+
+            logger.LogInformation("CartService.DeleteProduct - Start.");
+
+            Sku foundSku = this.GetSku(sku.Oid);
+
+            if (foundSku != null)
+            {
+
+                cart = this.GetCartFromRepository(id);
+
+                if (response == null)
+                {
+                    logger.LogInformation("CartService.DeleteProduct - Not found cart.");
+                }
+
+                cart.RemoveSkuFromCart(sku);
+
+                this.SaveCart(cart);
+
+            }
+
+            logger.LogInformation("CartService.DeleteProduct - End.");
+
+            return response;
+        }
+
+        private Cart GetCartFromRepository(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Cart CreateCart()
+        {
+            throw new NotImplementedException();
         }
 
         private Sku GetSku(Guid oid)
@@ -86,29 +187,10 @@ namespace ShoppApi.Service
             throw new NotImplementedException();
         }
 
-        private void SaveCart(PostAddCartResponse cart)
+        private void SaveCart(Cart cart)
         {
             throw new NotImplementedException();
         }
 
-        internal PutAddCartResponse UpdateProduct(Sku sku, int count)
-        {
-            throw new NotImplementedException();
-        }
-
-        private T CheckCart<T>(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void DeleteProduct(Sku sku)
-        {
-            throw new NotImplementedException();
-        }
-
-        private GetCartResponse AddNewCart()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

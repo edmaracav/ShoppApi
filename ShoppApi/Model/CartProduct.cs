@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShoppApi.DTO
 {
-    public class CartProductDTO
+    public class CartProduct
     {
         public Sku Sku { get; set; }
 

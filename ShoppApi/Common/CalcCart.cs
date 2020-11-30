@@ -8,7 +8,7 @@ namespace ShoppApi.Common
 {
     public class CalcCart
     {
-        public static Double TotalPrice(List<CartProductDTO> products)
+        public static Double TotalPrice(List<CartProduct> products)
         {
             Double cartTotalPrice = 0;
 

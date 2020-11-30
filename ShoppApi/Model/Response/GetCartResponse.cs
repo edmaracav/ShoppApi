@@ -10,11 +10,11 @@ namespace ShoppApi.Model.Response
     public class GetCartResponse
     {
 
-        public List<CartProductDTO> Products { get; set; }
+        public Cart Cart { get; set; }
 
-        public Double CartTotalPrice { get { return CalcCart.TotalPrice(Products); } }
+        public String ErrorMessage { get; set; }
 
-        public int ProductsCount { get { return this.Products.Count(); } }
+        public int StatusCode { get; set; }
 
     }
 }

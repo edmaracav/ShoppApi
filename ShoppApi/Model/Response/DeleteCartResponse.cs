@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace ShoppApi.Model.Response
 {
-    public class PostAddCartResponse
+    public class DeleteCartResponse
     {
-
-        public Cart Cart { get; set; }
 
         public String ErrorMessage { get; set; }
 

@@ -29,25 +29,25 @@ namespace ShoppApi.Controllers
             return this.cartService.GetCart(id);
         }
 
-        // POST api/<CartController>/addProduct
-        [HttpPost("/addProduct")]
-        public PostAddCartResponse Post([FromBody] PostAddProductRequest request)
+        // POST api/<CartController>/{id}/addProduct
+        [HttpPost("{id}/addProduct")]
+        public PostAddCartResponse Post(String id, [FromBody] PostAddProductRequest request)
         {
-            return this.cartService.AddNewProduct(request.Sku, request.Count);
+            return this.cartService.AddNewProduct(id, request.Sku, request.Count);
         }
 
         // PUT api/<CartController>/updateProduct
-        [HttpPut("/updateProduct/{id}")]
-        public PutAddCartResponse Put(int id, [FromBody] PutAddProductRequest request)
+        [HttpPut("{id}/updateProduct/")]
+        public PutAddCartResponse Put(String id, [FromBody] PutAddProductRequest request)
         {
-            return this.cartService.UpdateProduct(request.Sku, request.Count);
+            return this.cartService.UpdateProduct(id, request.Sku, request.Count);
         }
 
         // DELETE api/<CartController>/5
-        [HttpDelete()]
-        public void Delete([FromBody] DeleteAddProductRequest request)
+        [HttpDelete("{id}")]
+        public void Delete(String id, [FromBody] DeleteAddProductRequest request)
         {
-            this.cartService.DeleteProduct(request.Sku);
+            this.cartService.DeleteProduct(id, request.Sku);
         }
     }
 }
