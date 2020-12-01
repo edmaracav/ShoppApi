@@ -1,4 +1,4 @@
-name: .NET Core
+name: ShoppApi
 
 on:
   push:
@@ -30,8 +30,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: docker-compose build
-    # - name: Login Registry
-    #   run: docker login -u edmara -p 568321linda
+    - name: Login Registry
+      run: docker login -u edmara -p 568321linda
     - name: Publish
       run: docker-compose push
 
