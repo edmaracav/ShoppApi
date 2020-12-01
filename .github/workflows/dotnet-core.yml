@@ -40,15 +40,9 @@ jobs:
     needs: [build-and-test, build-and-publish]
     steps:
     - uses: actions/checkout@v2
-    - name: Setup permissions
-      run: cd ~/
-    - name: Setup permissions
-      run: mkdir .ssh
-    - name: Setup permissions
-      run: cd .ssh
     - name: Unload old version
-      run: ssh -i "shoppapi-key.pem" ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
+      run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
     - name: Remove images
-      run: ssh -i "shoppapi-key.pem" ubuntu@54.221.170.67 'docker rm -f $(docker ps -a -q)'
+      run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker rm -f $(docker ps -a -q)'
     - name: Deploy new image
-      run: ssh -i "shoppapi-key.pem" ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml up'
+      run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml up'
