@@ -40,6 +40,8 @@ jobs:
     needs: [build-and-test, build-and-publish]
     steps:
     - uses: actions/checkout@v2
+    - name: Setup permissions
+      run: chmod 400 shoppapi-key.pem
     - name: Unload old version
       run: ssh -i "shoppapi-key.pem" ubuntu@ec2-54-221-170-67.compute-1.amazonaws.com 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
     - name: Remove images
