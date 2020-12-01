@@ -37,6 +37,7 @@ jobs:
 
   deploy-on-server:
     runs-on: ubuntu-latest
+    needs: [build-and-test, build-and-publish]
     steps:
     - uses: actions/checkout@v2
     - name: Unload old version
