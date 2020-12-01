@@ -43,8 +43,8 @@ jobs:
     - name: Setup permissions
       run: chmod 400 shoppapi-key.pem
     - name: Unload old version
-      run: ssh -i "shoppapi-key.pem" ubuntu@ec2-54-221-170-67.compute-1.amazonaws.com 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
+      run: ssh -i "shoppapi-key.pem" ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
     - name: Remove images
-      run: ssh -i "shoppapi-key.pem" ubuntu@ec2-54-221-170-67.compute-1.amazonaws.com 'docker rm -f $(docker ps -a -q)'
+      run: ssh -i "shoppapi-key.pem" ubuntu@54.221.170.67 'docker rm -f $(docker ps -a -q)'
     - name: Deploy new image
-      run: ssh -i "shoppapi-key.pem" ubuntu@ec2-54-221-170-67.compute-1.amazonaws.com 'docker-compose -f /opt/shoppapi/docker-compose.yml up'
+      run: ssh -i "shoppapi-key.pem" ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml up'
