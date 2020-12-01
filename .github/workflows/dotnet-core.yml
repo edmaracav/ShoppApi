@@ -41,7 +41,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup permissions
-      run: chmod 400 shoppapi-key.pem
       run: ssh-keygen -R 54.221.170.67
     - name: Unload old version
       run: ssh -i "shoppapi-key.pem" ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
