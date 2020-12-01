@@ -5,7 +5,7 @@ services:
   # backend api
   shoppapi:
     build:
-      context: .\ShoppApi
+      context: ./ShoppApi
     image: edmara/shoppapi:${SHOPPAPI_VERSION}
     restart: always
     ports: 
