@@ -41,7 +41,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup permissions
-      run: cd ~/.ssh
+      run: cd ~/
+    - name: Setup permissions
+      run: mkdir .ssh
+    - name: Setup permissions
+      run: cd .ssh
     - name: Setup permissions
       run: ssh-keygen -R 54.221.170.67
     - name: Unload old version
