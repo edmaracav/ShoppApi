@@ -28,12 +28,10 @@ jobs:
     needs: [build-and-test]
     steps:
     - uses: actions/checkout@v2
-    - name: Test
-      run: ls -la
     - name: Build
       run: docker-compose build
-    - name: Login Registry
-      run: docker login -u edmara -p 568321linda
+    # - name: Login Registry
+    #   run: docker login -u edmara -p 568321linda
     - name: Publish
       run: docker-compose push
 
