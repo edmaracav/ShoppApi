@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+  
+  # backend api
+  shoppapi:
+    build:
+      context: .\ShoppApi
+    image: edmara/shoppapi:${SHOPPAPI_VERSION}
+    restart: always
+    ports: 
+      - 5000:5000
+      - 5001:5001
+    depends_on:
+      - database
+      - redis-cache
+  
+  # database
+  database:
+    image: postgres:11.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: senhadobancodedados
+    ports: 
+      - 5432:5432
+
+  # cache
+  redis-cache:
+    image: redis:5.0
+    restart: always
+    ports: 
+      - 6379:6379
