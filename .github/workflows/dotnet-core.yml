@@ -46,8 +46,6 @@ jobs:
       run: mkdir .ssh
     - name: Setup permissions
       run: cd .ssh
-    - name: Setup permissions
-      run: ssh-keygen -R 54.221.170.67
     - name: Unload old version
       run: ssh -i "shoppapi-key.pem" ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
     - name: Remove images
