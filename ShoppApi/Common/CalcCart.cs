@@ -12,7 +12,7 @@ namespace ShoppApi.Common
         {
             Double cartTotalPrice = 0;
 
-            products.ForEach(p => cartTotalPrice += p.TotalValue);
+            products?.ForEach(p => cartTotalPrice += p.TotalValue);
 
             return cartTotalPrice;
         }

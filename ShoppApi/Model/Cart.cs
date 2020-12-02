@@ -3,6 +3,7 @@ using ShoppApi.DTO;
 using ShoppApi.Model.Builders;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace ShoppApi.Model
     public class Cart
     {
 
+        [Key]
         public String Id { get; set; }
 
         public List<CartProduct> Products { get; set; }
@@ -18,6 +20,19 @@ namespace ShoppApi.Model
         public Double CartTotalPrice { get { return CalcCart.TotalPrice(Products); } }
 
         public int ProductsCount { get { return this.Products.Count(); } }
+
+        public Cart()
+        {
+            if (this.Products == null)
+                this.Products = new List<CartProduct>();
+        }
+
+        public Cart(String Id)
+        {
+            this.Id = Id;
+            if (this.Products == null)
+                this.Products = new List<CartProduct>();
+        }
 
         internal void AddSkuToCart(Sku sku, int count, bool update)
         {

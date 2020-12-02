@@ -7,14 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppApi.Model.Response
 {
-    public class GetCartResponse
+    public class GetCartResponse : DefaultCartResponse
     {
-
-        public Cart Cart { get; set; }
-
-        public String ErrorMessage { get; set; }
-
-        public int StatusCode { get; set; }
-
     }
 }

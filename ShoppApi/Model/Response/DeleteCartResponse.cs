@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShoppApi.Model.Response
 {
-    public class DeleteCartResponse
+    public class DeleteCartResponse : DefaultCartResponse
     {
-
-        public String ErrorMessage { get; set; }
-
-        public int StatusCode { get; set; }
-
     }
 }

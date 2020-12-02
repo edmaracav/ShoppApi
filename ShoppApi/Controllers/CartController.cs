@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ShoppApi.Model.Request;
 using ShoppApi.Model.Response;
 using ShoppApi.Service;
+using ShoppApi.Service.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,39 +17,88 @@ namespace ShoppApi.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        private CartService cartService;
+        private ICartService cartService;
 
-        public CartController(CartService cartService)
+        public CartController(ICartService cartService)
         {
             this.cartService = cartService;
         }
 
         // GET api/<CartController>/5
         [HttpGet("{id}")]
-        public GetCartResponse Get(String id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Get(String id)
         {
-            return this.cartService.GetCart(id);
+            return Ok(this.cartService.GetCart(id).Cart);
         }
 
         // POST api/<CartController>/{id}/addProduct
         [HttpPost("{id}/addProduct")]
-        public PostAddCartResponse Post(String id, [FromBody] PostAddProductRequest request)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult Post(String id, [FromBody] PostAddProductRequest request)
         {
-            return this.cartService.AddNewProduct(id, request.Sku, request.Count);
+            PostAddCartResponse response = this.cartService.AddNewProduct(id, request.Sku, request.Count);
+
+            switch (response.StatusCode)
+            {
+                case StatusCodes.Status200OK:
+                    return Ok(response.Cart);
+                case StatusCodes.Status406NotAcceptable:
+                    return StatusCode(StatusCodes.Status406NotAcceptable, response);
+                case StatusCodes.Status404NotFound:
+                    return NotFound(response);
+                default:
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
         }
 
         // PUT api/<CartController>/updateProduct
-        [HttpPut("{id}/updateProduct/")]
-        public PutAddCartResponse Put(String id, [FromBody] PutAddProductRequest request)
+        [HttpPut("{id}/updateProduct")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult Put(String id, [FromBody] PutAddProductRequest request)
         {
-            return this.cartService.UpdateProduct(id, request.Sku, request.Count);
+            PutAddCartResponse response = this.cartService.UpdateProduct(id, request.Sku, request.Count);
+
+            switch (response.StatusCode)
+            {
+                case StatusCodes.Status200OK:
+                    return Ok(response.Cart);
+                case StatusCodes.Status406NotAcceptable:
+                    return StatusCode(StatusCodes.Status406NotAcceptable, response);
+                case StatusCodes.Status404NotFound:
+                    return NotFound(response);
+                default:
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
         }
 
         // DELETE api/<CartController>/5
-        [HttpDelete("{id}")]
-        public void Delete(String id, [FromBody] DeleteAddProductRequest request)
+        [HttpDelete("{id}/deleteProduct")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult Delete(String id, [FromBody] DeleteAddProductRequest request)
         {
-            this.cartService.DeleteProduct(id, request.Sku);
+            DeleteCartResponse response = this.cartService.DeleteProduct(id, request.Sku);
+
+            switch (response.StatusCode)
+            {
+                case StatusCodes.Status200OK:
+                    return Ok(response.Cart);
+                case StatusCodes.Status404NotFound:
+                    return NotFound(response);
+                default:
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
         }
     }
 }

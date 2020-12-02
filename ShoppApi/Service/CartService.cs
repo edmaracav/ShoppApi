@@ -1,6 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using ShoppApi.Model;
 using ShoppApi.Model.Response;
+using ShoppApi.Repositories.Contexts;
+using ShoppApi.Repositories.Contracts;
+using ShoppApi.Service.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +12,22 @@ using System.Threading.Tasks;
 
 namespace ShoppApi.Service
 {
-    public class CartService
+    public class CartService : ICartService
     {
         private readonly ILogger logger;
 
-        public CartService(ILogger<CartService> logger)
+        private readonly ICartRepository cartRepository;
+
+        private readonly ISkuRepository skuRepository;
+
+        public CartService(ILogger<CartService> logger, ICartRepository cartRepository, ISkuRepository skuRepository)
         {
             this.logger = logger;
+            this.cartRepository = cartRepository;
+            this.skuRepository = skuRepository;
         }
 
-        internal GetCartResponse GetCart(String id)
+        public GetCartResponse GetCart(String id)
         {
             Cart cart = null;
             GetCartResponse response = new GetCartResponse();
@@ -39,15 +49,16 @@ namespace ShoppApi.Service
                     cart = this.CreateCart();
                 }
 
-                response.Cart = cart;
             }
+
+            response.Cart = cart;
 
             logger.LogInformation("CartService.GetCart - End.");
 
             return response;
         }
 
-        internal PostAddCartResponse AddNewProduct(String id, Sku sku, int count)
+        public PostAddCartResponse AddNewProduct(String id, Sku sku, int count)
         {
             Cart cart = null;
             PostAddCartResponse response = new PostAddCartResponse();
@@ -59,6 +70,7 @@ namespace ShoppApi.Service
                 logger.LogInformation("CartService.AddNewProduct - Products count is 0 or less.");
 
                 response.ErrorMessage = "Adding items with zeroed quantity is not allowed";
+                response.StatusCode = StatusCodes.Status406NotAcceptable;
 
                 return response;
             }
@@ -72,7 +84,10 @@ namespace ShoppApi.Service
                 {
                     logger.LogInformation("CartService.AddNewProduct - Count is more then inventory.");
 
-                    response.ErrorMessage = "adding more products than is in stock is not allowed";
+                    response.ErrorMessage = "Adding more products than is in stock is not allowed";
+                    response.StatusCode = StatusCodes.Status406NotAcceptable;
+
+                    return response;
                 }
 
                 cart = this.GetCartFromRepository(id);
@@ -80,6 +95,7 @@ namespace ShoppApi.Service
                 if (cart == null)
                 {
                     logger.LogInformation("CartService.AddNewProduct - Not found cart.");
+                    response.StatusCode = StatusCodes.Status404NotFound;
 
                     return response;
                 }
@@ -88,10 +104,14 @@ namespace ShoppApi.Service
 
                 this.SaveCart(cart);
 
+                response.Cart = cart;
+                response.StatusCode = StatusCodes.Status200OK;
+
             }
             else
             {
-                response.ErrorMessage = "sku not found";
+                response.ErrorMessage = "Sku not found";
+                response.StatusCode = StatusCodes.Status404NotFound;
             }
 
             logger.LogInformation("CartService.AddNewProduct - End.");
@@ -99,13 +119,23 @@ namespace ShoppApi.Service
             return response;
         }
 
-        internal PutAddCartResponse UpdateProduct(String id, Sku sku, int count)
+        public PutAddCartResponse UpdateProduct(String id, Sku sku, int count)
         {
 
             Cart cart = null;
             PutAddCartResponse response = new PutAddCartResponse();
 
             logger.LogInformation("CartService.UpdateProduct - Start.");
+
+            if (count <= 0)
+            {
+                logger.LogInformation("CartService.UpdateProduct - Products count is 0 or less.");
+
+                response.ErrorMessage = "Adding items with zeroed quantity is not allowed";
+                response.StatusCode = StatusCodes.Status406NotAcceptable;
+
+                return response;
+            }
 
             Sku foundSku = this.GetSku(sku.Oid);
 
@@ -115,7 +145,10 @@ namespace ShoppApi.Service
                 if (count > foundSku.Inventory)
                 {
                     logger.LogInformation("CartService.UpdateProduct - Count is more then inventory.");
-                    response.ErrorMessage = "adding more products than is in stock is not allowed";
+                    response.ErrorMessage = "Adding more products than is in stock is not allowed";
+                    response.StatusCode = StatusCodes.Status406NotAcceptable;
+
+                    return response;
                 }
 
                 cart = this.GetCartFromRepository(id);
@@ -123,6 +156,8 @@ namespace ShoppApi.Service
                 if (cart == null)
                 {
                     logger.LogInformation("CartService.UpdateProduct - Not found cart.");
+                    response.StatusCode = StatusCodes.Status404NotFound;
+
                     return response;
                 }
 
@@ -130,10 +165,14 @@ namespace ShoppApi.Service
 
                 this.SaveCart(cart);
 
+                response.Cart = cart;
+                response.StatusCode = StatusCodes.Status200OK;
+
             }
             else
             {
-                response.ErrorMessage = "sku not found";
+                response.ErrorMessage = "Sku not found";
+                response.StatusCode = StatusCodes.Status404NotFound;
             }
 
             logger.LogInformation("CartService.UpdateProduct - End.");
@@ -142,7 +181,7 @@ namespace ShoppApi.Service
 
         }
 
-        internal DeleteCartResponse DeleteProduct(String id, Sku sku)
+        public DeleteCartResponse DeleteProduct(String id, Sku sku)
         {
             Cart cart = null;
             DeleteCartResponse response = new DeleteCartResponse();
@@ -159,12 +198,15 @@ namespace ShoppApi.Service
                 if (response == null)
                 {
                     logger.LogInformation("CartService.DeleteProduct - Not found cart.");
+                    response.StatusCode = StatusCodes.Status404NotFound;
                 }
 
                 cart.RemoveSkuFromCart(sku);
 
                 this.SaveCart(cart);
 
+                response.Cart = cart;
+                response.StatusCode = StatusCodes.Status200OK;
             }
 
             logger.LogInformation("CartService.DeleteProduct - End.");
@@ -174,22 +216,33 @@ namespace ShoppApi.Service
 
         private Cart GetCartFromRepository(string id)
         {
-            throw new NotImplementedException();
+            // Buscar carrinho em cache
+            Cart cart = this.cartRepository.getCartFromCache(id);
+
+            if (cart == null)
+            {
+                // Caso o carrinho não exista em cache, buscar no banco.
+                cart = this.cartRepository.getCart(id);
+
+                this.cartRepository.AddCartToCache(cart);
+            }
+
+            return cart;
         }
 
         private Cart CreateCart()
         {
-            throw new NotImplementedException();
+            return this.cartRepository.CreateCart();
         }
 
         private Sku GetSku(Guid oid)
         {
-            throw new NotImplementedException();
+            return this.skuRepository.FindSku(oid);
         }
 
         private void SaveCart(Cart cart)
         {
-            throw new NotImplementedException();
+            this.cartRepository.SaveOrUpdateCart(cart);
         }
 
     }
