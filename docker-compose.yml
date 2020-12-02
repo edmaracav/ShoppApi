@@ -11,6 +11,7 @@ services:
     ports: 
       - 5000:5000
       - 5001:5001
+      - 8080:80
     depends_on:
       - database
       - redis-cache
