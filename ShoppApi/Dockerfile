@@ -12,4 +12,4 @@ COPY --from=Build-Container /Build/bin/Release/netcoreapp3.1/ App/
 
 WORKDIR /App
 
-ENTRYPOINT ["dotnet", "ShoppApi.dll"]
+ENTRYPOINT ["dotnet", "ShoppApi.dll", "--urls=\"https://localhost:5001;http://localhost:5000\""]
