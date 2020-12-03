@@ -224,7 +224,8 @@ namespace ShoppApi.Service
                 // Caso o carrinho não exista em cache, buscar no banco.
                 cart = this.cartRepository.getCart(id);
 
-                this.cartRepository.AddCartToCache(cart);
+                if (cart != null)
+                    this.cartRepository.AddCartToCache(cart);
             }
 
             return cart;

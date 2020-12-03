@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ShoppApi.Model;
 using ShoppApi.Repositories;
+using ShoppApi.Repositories.Cache;
 using ShoppApi.Repositories.Contexts;
 using ShoppApi.Repositories.Contracts;
 using ShoppApi.Service;
@@ -31,11 +32,14 @@ namespace ShoppApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //  Redis
+            services.AddSingleton<RedisConnection>();
 
-
+            // Database
             services.AddDbContext<DatabaseContext>(options =>
                                                  options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Controllers
             services.AddControllers();
 
             // Services
@@ -77,6 +81,7 @@ namespace ShoppApi
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

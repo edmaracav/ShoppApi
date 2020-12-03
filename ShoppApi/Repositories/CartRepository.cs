@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ShoppApi.Model;
+using ShoppApi.Repositories.Cache;
 using ShoppApi.Repositories.Contexts;
 using ShoppApi.Repositories.Contracts;
 using System;
@@ -14,14 +17,18 @@ namespace ShoppApi.Repositories
 
         private DatabaseContext context;
 
-        public CartRepository(DatabaseContext context)
+        private RedisConnection redisConnection;
+
+        public CartRepository(DatabaseContext context, [FromServices] RedisConnection redisConnection)
         {
             this.context = context;
+            this.redisConnection = redisConnection;
         }
 
         public void AddCartToCache(Cart cart)
         {
-            
+            String cartJson = JsonConvert.SerializeObject(cart);
+            this.redisConnection.SetValue(cart.Id, cartJson);
         }
 
         public Cart CreateCart()
@@ -30,6 +37,8 @@ namespace ShoppApi.Repositories
 
             this.context.carts.Add(cart);
             this.context.SaveChanges();
+
+            this.AddCartToCache(cart);
 
             return cart;
         }
@@ -45,13 +54,16 @@ namespace ShoppApi.Repositories
 
         public Cart getCartFromCache(string id)
         {
-            return null;
+            String cartJson = this.redisConnection.GetValueFromKey(id);
+            return cartJson == null ? null : JsonConvert.DeserializeObject<Cart>(cartJson);
         }
 
         public void SaveOrUpdateCart(Cart cart)
         {
             this.context.carts.Update(cart);
             this.context.SaveChanges();
+
+            this.AddCartToCache(cart);
         }
     }
 }
