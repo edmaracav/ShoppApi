@@ -32,6 +32,14 @@ namespace ShoppApi.Controllers
             return Ok(this.cartService.GetCart(id).Cart);
         }
 
+        // POST api/<CartController>/
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult Post()
+        {
+            return Ok(this.cartService.PostCart().Cart);
+        }
+
         // POST api/<CartController>/{id}/addProduct
         [HttpPost("{id}/addProduct")]
         [ProducesResponseType(StatusCodes.Status200OK)]

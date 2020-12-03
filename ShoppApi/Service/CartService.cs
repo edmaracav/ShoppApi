@@ -246,5 +246,19 @@ namespace ShoppApi.Service
             this.cartRepository.SaveOrUpdateCart(cart);
         }
 
+        public PostCartResponse PostCart()
+        {
+            PostCartResponse response = new PostCartResponse();
+
+            logger.LogInformation("CartService.PostCart - Start.");
+
+            Cart cart = this.CreateCart();
+
+            response.Cart = cart;
+
+            logger.LogInformation("CartService.PostCart - End.");
+
+            return response;
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace ShoppApi.Service.Contracts
 
         public GetCartResponse GetCart(String id);
 
+        public PostCartResponse PostCart();
+
         public PostAddCartResponse AddNewProduct(String id, Sku sku, int count);
 
         public PutAddCartResponse UpdateProduct(String id, Sku sku, int count);
