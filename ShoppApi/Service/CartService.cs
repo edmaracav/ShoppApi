@@ -58,7 +58,7 @@ namespace ShoppApi.Service
             return response;
         }
 
-        public PostAddCartResponse AddNewProduct(String id, Sku sku, int count)
+        public PostAddCartResponse AddNewProduct(String id, Guid skuId, int count)
         {
             Cart cart = null;
             PostAddCartResponse response = new PostAddCartResponse();
@@ -75,7 +75,7 @@ namespace ShoppApi.Service
                 return response;
             }
 
-            Sku foundSku = this.GetSku(sku.Oid);
+            Sku foundSku = this.GetSku(skuId);
 
             if (foundSku != null)
             {
@@ -119,7 +119,7 @@ namespace ShoppApi.Service
             return response;
         }
 
-        public PutAddCartResponse UpdateProduct(String id, Sku sku, int count)
+        public PutAddCartResponse UpdateProduct(String id, Guid skuId, int count)
         {
 
             Cart cart = null;
@@ -137,7 +137,7 @@ namespace ShoppApi.Service
                 return response;
             }
 
-            Sku foundSku = this.GetSku(sku.Oid);
+            Sku foundSku = this.GetSku(skuId);
 
             if (foundSku != null)
             {
@@ -181,14 +181,14 @@ namespace ShoppApi.Service
 
         }
 
-        public DeleteCartResponse DeleteProduct(String id, Sku sku)
+        public DeleteCartResponse DeleteProduct(String id, Guid skuId)
         {
             Cart cart = null;
             DeleteCartResponse response = new DeleteCartResponse();
 
             logger.LogInformation("CartService.DeleteProduct - Start.");
 
-            Sku foundSku = this.GetSku(sku.Oid);
+            Sku foundSku = this.GetSku(skuId);
 
             if (foundSku != null)
             {
@@ -201,7 +201,7 @@ namespace ShoppApi.Service
                     response.StatusCode = StatusCodes.Status404NotFound;
                 }
 
-                cart.RemoveSkuFromCart(sku);
+                cart.RemoveSkuFromCart(skuId);
 
                 this.SaveCart(cart);
 

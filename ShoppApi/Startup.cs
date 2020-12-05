@@ -44,10 +44,12 @@ namespace ShoppApi
 
             // Services
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IProductService, ProductService>();
             
             // Repositories
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ISkuRepository, SkuRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();

@@ -58,12 +58,12 @@ namespace ShoppApi.Model
 
         }
 
-        internal void RemoveSkuFromCart(Sku sku)
+        internal void RemoveSkuFromCart(Guid skuId)
         {
             CartProduct removableCartProductDTO = null;
 
             this.Products.ForEach(p => {
-                if (p.Sku.Oid == sku.Oid)
+                if (p.Sku.Oid == skuId)
                     removableCartProductDTO = p;
             });
 

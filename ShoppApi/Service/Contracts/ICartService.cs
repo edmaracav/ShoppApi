@@ -14,11 +14,11 @@ namespace ShoppApi.Service.Contracts
 
         public PostCartResponse PostCart();
 
-        public PostAddCartResponse AddNewProduct(String id, Sku sku, int count);
+        public PostAddCartResponse AddNewProduct(String id, Guid skuId, int count);
 
-        public PutAddCartResponse UpdateProduct(String id, Sku sku, int count);
+        public PutAddCartResponse UpdateProduct(String id, Guid skuId, int count);
 
-        public DeleteCartResponse DeleteProduct(String id, Sku sku);
+        public DeleteCartResponse DeleteProduct(String id, Guid skuId);
 
     }
 }

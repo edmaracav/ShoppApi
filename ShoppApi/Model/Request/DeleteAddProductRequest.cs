@@ -7,6 +7,6 @@ namespace ShoppApi.Model.Request
 {
     public class DeleteAddProductRequest
     {
-        public Sku Sku { get; set; }
+        public Guid SkuId { get; set; }
     }
 }

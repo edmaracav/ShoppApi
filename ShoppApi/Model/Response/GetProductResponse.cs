@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace ShoppApi.Model.Response
 {
-    public abstract class DefaultCartResponse : DefaultResponse
+    public class GetProductResponse : DefaultResponse
     {
-        public Cart Cart { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

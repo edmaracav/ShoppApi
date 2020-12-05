@@ -1,4 +1,5 @@
-﻿using ShoppApi.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using ShoppApi.Model;
 using ShoppApi.Repositories.Contexts;
 using ShoppApi.Repositories.Contracts;
 using System;
@@ -8,22 +9,21 @@ using System.Threading.Tasks;
 
 namespace ShoppApi.Repositories
 {
-    public class SkuRepository : ISkuRepository
+    public class ProductRepository : IProductRepository
     {
-
         private DatabaseContext context;
 
-        public SkuRepository(DatabaseContext context)
+        public ProductRepository(DatabaseContext context)
         {
             this.context = context;
         }
 
-        public Sku FindSku(Guid oid)
+        public List<Product> GetAll()
         {
             return this.context
-                    .Skus
-                    .Where(s => s.Oid.Equals(oid))
-                    .FirstOrDefault();
+                    .Products
+                    .Include(p => p.Skus)
+                    .ToList();
         }
     }
 }

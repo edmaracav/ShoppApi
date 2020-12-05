@@ -7,7 +7,7 @@ namespace ShoppApi.Model.Request
 {
     public class PostAddProductRequest
     {
-        public Sku Sku { get; set; }
+        public Guid SkuId { get; set; }
 
         public int Count { get; set; }
     }

@@ -48,7 +48,7 @@ namespace ShoppApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Post(String id, [FromBody] PostAddProductRequest request)
         {
-            PostAddCartResponse response = this.cartService.AddNewProduct(id, request.Sku, request.Count);
+            PostAddCartResponse response = this.cartService.AddNewProduct(id, request.SkuId, request.Count);
 
             switch (response.StatusCode)
             {
@@ -72,7 +72,7 @@ namespace ShoppApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Put(String id, [FromBody] PutAddProductRequest request)
         {
-            PutAddCartResponse response = this.cartService.UpdateProduct(id, request.Sku, request.Count);
+            PutAddCartResponse response = this.cartService.UpdateProduct(id, request.SkuId, request.Count);
 
             switch (response.StatusCode)
             {
@@ -95,7 +95,7 @@ namespace ShoppApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(String id, [FromBody] DeleteAddProductRequest request)
         {
-            DeleteCartResponse response = this.cartService.DeleteProduct(id, request.Sku);
+            DeleteCartResponse response = this.cartService.DeleteProduct(id, request.SkuId);
 
             switch (response.StatusCode)
             {

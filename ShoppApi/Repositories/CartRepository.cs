@@ -35,7 +35,7 @@ namespace ShoppApi.Repositories
         {
             Cart cart = new Cart(Guid.NewGuid().ToString());
 
-            this.context.carts.Add(cart);
+            this.context.Carts.Add(cart);
             this.context.SaveChanges();
 
             this.AddCartToCache(cart);
@@ -46,7 +46,7 @@ namespace ShoppApi.Repositories
         public Cart getCart(string id)
         {
             return this.context
-                    .carts
+                    .Carts
                     .Where(c => c.Id.Equals(id))
                     .Include(c => c.Products)
                     .FirstOrDefault();
@@ -60,7 +60,7 @@ namespace ShoppApi.Repositories
 
         public void SaveOrUpdateCart(Cart cart)
         {
-            this.context.carts.Update(cart);
+            this.context.Carts.Update(cart);
             this.context.SaveChanges();
 
             this.AddCartToCache(cart);
