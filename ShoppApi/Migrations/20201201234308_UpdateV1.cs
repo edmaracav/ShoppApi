@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ShoppApi.Migrations
 {
+    [ExcludeFromCodeCoverage]
     public partial class UpdateV1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

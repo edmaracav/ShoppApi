@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShoppApi.Model;
 using ShoppApi.Model.Request;
 using ShoppApi.Model.Response;
 using ShoppApi.Service;
@@ -37,7 +38,8 @@ namespace ShoppApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Post()
         {
-            return Ok(this.cartService.PostCart().Cart);
+            Cart cart = this.cartService.PostCart().Cart;
+            return CreatedAtAction(nameof(Get), new { id = cart.Id }, this.cartService.PostCart().Cart);
         }
 
         // POST api/<CartController>/{id}/addProduct

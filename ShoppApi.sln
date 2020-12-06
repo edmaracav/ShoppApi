@@ -3,9 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppApi", "ShoppApi\ShoppApi.csproj", "{CFEC8DFD-68C5-4B1D-B46B-173BF1ADD669}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppApi", "ShoppApi\ShoppApi.csproj", "{CFEC8DFD-68C5-4B1D-B46B-173BF1ADD669}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppApiTests", "ShoppApiTests\ShoppApiTests.csproj", "{A9C42FFD-68F6-4266-B206-9228357E2A95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppApiTests", "ShoppApiTests\ShoppApiTests.csproj", "{A9C42FFD-68F6-4266-B206-9228357E2A95}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CFEC8DFD-68C5-4B1D-B46B-173BF1ADD669} = {CFEC8DFD-68C5-4B1D-B46B-173BF1ADD669}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
