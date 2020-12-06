@@ -23,6 +23,8 @@ namespace ShoppApi
 {
     public class Startup
     {
+        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -45,7 +47,7 @@ namespace ShoppApi
             // Services
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IProductService, ProductService>();
-            
+
             // Repositories
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ISkuRepository, SkuRepository>();
@@ -53,6 +55,18 @@ namespace ShoppApi
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
+
+            // CORS
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
         }
 
@@ -66,6 +80,9 @@ namespace ShoppApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // CORS
+            app.UseCors();
 
             app.UseAuthorization();
 
