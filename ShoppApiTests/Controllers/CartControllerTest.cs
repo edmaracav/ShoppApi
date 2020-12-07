@@ -23,7 +23,7 @@ namespace ShoppApiTests.Controllers
 
         private readonly int PRODUCT_COUNT;
 
-        private CartController controller;
+        private ICartController controller;
 
         private ICartService service;
 
@@ -115,7 +115,7 @@ namespace ShoppApiTests.Controllers
         private void StartupMock()
         {
             this.service = Substitute.For<ICartService>();
-            this.controller = new CartController(this.service);
+            this.controller = new ICartController(this.service);
         }
 
         [Fact]

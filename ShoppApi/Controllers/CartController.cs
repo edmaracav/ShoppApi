@@ -26,9 +26,9 @@ namespace ShoppApi.Controllers
         }
 
         // GET api/<CartController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id?}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Get(String id)
+        public IActionResult Get(String? id)
         {
             return Ok(this.cartService.GetCart(id).Cart);
         }

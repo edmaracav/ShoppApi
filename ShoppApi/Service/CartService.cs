@@ -34,7 +34,7 @@ namespace ShoppApi.Service
 
             logger.LogInformation("CartService.GetCart - Start.");
 
-            if (id.Equals(String.Empty))
+            if (id == null || id.Equals(String.Empty))
             {
                 logger.LogInformation("CartService.GetCart - ID is empty, create new cart.");
                 cart = this.CreateCart();
@@ -195,7 +195,7 @@ namespace ShoppApi.Service
 
                 cart = this.GetCartFromRepository(id);
 
-                if (response == null)
+                if (cart == null)
                 {
                     logger.LogInformation("CartService.DeleteProduct - Not found cart.");
                     response.StatusCode = StatusCodes.Status404NotFound;
@@ -214,7 +214,7 @@ namespace ShoppApi.Service
             return response;
         }
 
-        private Cart GetCartFromRepository(string id)
+        private Cart GetCartFromRepository(String id)
         {
             // Buscar carrinho em cache
             Cart cart = this.cartRepository.getCartFromCache(id);
