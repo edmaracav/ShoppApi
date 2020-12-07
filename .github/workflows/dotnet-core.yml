@@ -35,14 +35,14 @@ jobs:
     - name: Publish
       run: docker-compose push
 
-  deploy-on-server:
-    runs-on: ubuntu-latest
-    needs: [build-and-test, build-and-publish]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Unload old version
-      run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
-    - name: Remove images
-      run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker rm -f $(docker ps -a -q)'
-    - name: Deploy new image
-      run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml up'
+  # deploy-on-server:
+  #   runs-on: ubuntu-latest
+  #   needs: [build-and-test, build-and-publish]
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Unload old version
+  #     run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml down'
+  #   - name: Remove images
+  #     run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker rm -f $(docker ps -a -q)'
+  #   - name: Deploy new image
+  #     run: ssh -i "shoppapi-key.pem" -o UserKnownHostsFile=/github/home/.ssh/known_hosts -tt ubuntu@54.221.170.67 'docker-compose -f /opt/shoppapi/docker-compose.yml up'
