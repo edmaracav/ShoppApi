@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Moq;
 using NSubstitute;
 using ShoppApi.Model;
 using ShoppApi.Repositories.Contracts;
@@ -37,15 +38,7 @@ namespace ShoppApiTests.Service
 
         private void StartupMock()
         {
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder
-                    .AddConsole()
-                    .AddEventLog();
-            });
-
-            this.logger = loggerFactory.CreateLogger<CartService>();
-
+            this.logger = Mock.Of<ILogger<CartService>>();
             this.cartRepository = Substitute.For<ICartRepository>();
             this.skuRepository = Substitute.For<ISkuRepository>();
             this.service = new CartService(this.logger, this.cartRepository, this.skuRepository);

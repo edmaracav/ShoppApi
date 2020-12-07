@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NSubstitute;
 using ShoppApi.Model;
 using ShoppApi.Model.Response;
@@ -47,15 +48,7 @@ namespace ShoppApiTests.Service
 
         private void StartupMock()
         {
-            var loggerFactory = LoggerFactory.Create(builder =>
-            {
-                builder
-                    .AddConsole()
-                    .AddEventLog();
-            });
-
-            this.logger = loggerFactory.CreateLogger<ProductService>();
-
+            this.logger = Mock.Of<ILogger<ProductService>>();
             this.repository = Substitute.For<IProductRepository>();
             this.service = new ProductService(this.logger, this.repository);
         }
