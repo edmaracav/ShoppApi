@@ -22,10 +22,6 @@ namespace ShoppApiTests.Service
 
         private ILogger<CartService> logger;
 
-        private String CART_ID_CACHE = "aa2978ce-3824-11eb-adc1-0242ac120002";
-
-        private Cart CacheCart;
-
         public CartServiceTest()
         {
             this.StartupData();
@@ -59,10 +55,7 @@ namespace ShoppApiTests.Service
         public void returnSuccessWhenGetAlreadExistsCartOnCache()
         {
 
-            this.cartRepository
-                .getCartFromCache(CART_ID_CACHE)
-                .Returns(this.CacheCart);
-
+            
         }
 
         [Fact]

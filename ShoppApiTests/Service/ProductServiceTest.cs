@@ -36,6 +36,7 @@ namespace ShoppApiTests.Service
         private void StartupData()
         {
             this.products = new List<Product>();
+            this.notFoundProducts = null;
 
             Product product01 = new Product();
             product01.Oid = Guid.NewGuid();
